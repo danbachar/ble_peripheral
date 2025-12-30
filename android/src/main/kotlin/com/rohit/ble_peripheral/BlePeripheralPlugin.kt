@@ -290,21 +290,29 @@ class BlePeripheralPlugin : FlutterPlugin, BlePeripheralChannel, ActivityAware {
                 super.onConnectionStateChange(device, status, newState)
                 when (newState) {
                     BluetoothProfile.STATE_CONNECTED -> {
-                        if (device.bondState == BluetoothDevice.BOND_NONE) {
-                            // Wait for bonding
+                        val requiresBonding = gattServer?.services?.any { service ->
+                            service.characteristics.any { characteristic ->
+                                characteristic.permissions and (
+                                    BluetoothGattCharacteristic.PERMISSION_READ_ENCRYPTED or
+                                    BluetoothGattCharacteristic.PERMISSION_WRITE_ENCRYPTED or
+                                    BluetoothGattCharacteristic.PERMISSION_READ_ENCRYPTED_MITM or
+                                    BluetoothGattCharacteristic.PERMISSION_WRITE_ENCRYPTED_MITM
+                                ) != 0
+                            }
+                        } ?: false
+
+                        if (requiresBonding && device.bondState == BluetoothDevice.BOND_NONE) {
                             listOfDevicesWaitingForBond.add(device.address)
                             device.createBond()
-                        } else if (device.bondState == BluetoothDevice.BOND_BONDED) {
+                        } else {
                             handler?.post {
                                 gattServer?.connect(device, true)
                             }
                             synchronized(bluetoothDevicesMap) {
-                                bluetoothDevicesMap.put(
-                                    device.address,
-                                    device
-                                )
+                                bluetoothDevicesMap[device.address] = device
                             }
                         }
+
                         onConnectionUpdate(device, status, newState)
                     }
 

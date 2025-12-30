@@ -1,3 +1,6 @@
+# 2.5.0
+- Support bondless communication for attributes that do not require bonding
+
 ## 2.4.0
 
 - BreakingChange: `onCharacteristicSubscriptionChange` also send `String? name`
