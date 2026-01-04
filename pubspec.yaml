@@ -1,6 +1,6 @@
 name: ble_peripheral_bondless
 description: Ble peripheral is a Flutter plugin that allows you to use your device as Bluetooth Low Energy (BLE) peripheral, while supporting bondless communication.
-version: 2.5.0
+version: 2.5.1
 homepage: https://github.com/danbachar/ble_peripheral
 repository: https://github.com/danbachar/ble_peripheral
 issue_tracker: https://github.com/danbachar/ble_peripheral/issues

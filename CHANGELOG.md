@@ -1,3 +1,7 @@
+# 2.5.1
+- fix iOS bug that resulted in no GATT characteristics found through case-insensitive characteristic UUID comparison
+- add podspec iOS file
+
 # 2.5.0
 - Support bondless communication for attributes that do not require bonding
 
